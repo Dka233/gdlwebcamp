@@ -1,0 +1,262 @@
+$(function () {
+  $('#registros').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "language": {
+      paginate: {
+        next: 'Siguiente',
+        previous: 'Anterior',
+        last: 'Último',
+        first: 'Primero',
+      },
+      info: 'Mostrano _START_ a _END_ de _TOTAL_ resultados',
+      emptyTable: 'No hay registros',
+      infoEmpty: '0 registros',
+
+    },
+  });
+});
+
+$('#repetir_password').on('blur', function() {
+  var password_nuevo = $('#password').val();
+
+  if($(this).val() == password_nuevo) {
+    $('#resultado_password').text('Correcto');
+    $('input#password').parents('.form-group').addClass('is-valid');
+    $('#resultado_password').addClass('form-control is-valid');
+    $('#resultado_password').removeClass('is-invalid');
+    $('#button').removeClass('d-none');
+
+
+  } else {
+    $('#resultado_password').text('Las contraseñas introducidas no son iguales');
+    $('input#password').parents('.form-group').addClass('is-invalid');
+    $('#resultado_password').addClass('form-control is-invalid');
+
+  }
+});
+
+//Datemask dd/mm/yyyy
+$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+//Datemask2 mm/dd/yyyy
+$('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+//Money Euro
+$('[data-mask]').inputmask()
+
+//Date range picker
+   $('#reservationdate').datetimepicker({
+       format: 'L'
+   });
+   //Date range picker
+   $('#reservation').daterangepicker()
+   //Date range picker with time picker
+   $('#reservationtime').daterangepicker({
+     timePicker: true,
+     timePickerIncrement: 30,
+     locale: {
+       format: 'MM/DD/YYYY hh:mm A'
+     }
+   })
+   //Date range as a button
+   $('#daterange-btn').daterangepicker(
+     {
+       ranges   : {
+         'Today'       : [moment(), moment()],
+         'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+         'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+         'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+         'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+       },
+       startDate: moment().subtract(29, 'days'),
+       endDate  : moment()
+     },
+     function (start, end) {
+       $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+     }
+   )
+   //Timepicker
+$('#timepicker').datetimepicker({
+  format: 'LT'
+})
+
+  //Icon selector
+$('#icono').iconpicker();
+// -----
+
+$(function () {
+  /* ChartJS
+   * -------
+   * Here we will create a few charts using ChartJS
+   */
+
+  //--------------
+  //- AREA CHART -
+  //--------------
+
+  // Get context with jQuery - using jQuery's .get() method.
+  var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+
+  var areaChartData = {
+    labels  : ['2020-07-01', '2020-08-31', '2020-09-01', '2020-10-26'],
+    datasets: [
+      {
+        label               : 'Digital Goods',
+        backgroundColor     : 'rgba(60,141,188,0.9)',
+        borderColor         : 'rgba(60,141,188,0.8)',
+        pointRadius          : false,
+        pointColor          : '#3b8bba',
+        pointStrokeColor    : 'rgba(60,141,188,1)',
+        pointHighlightFill  : '#fff',
+        pointHighlightStroke: 'rgba(60,141,188,1)',
+        data                : [0 , 3, 2, 2]
+      },
+    ]
+  }
+
+  var areaChartOptions = {
+    maintainAspectRatio : false,
+    responsive : true,
+    legend: {
+      display: false
+    },
+    scales: {
+      xAxes: [{
+        gridLines : {
+          display : false,
+        }
+      }],
+      yAxes: [{
+        gridLines : {
+          display : false,
+        }
+      }]
+    }
+  }
+
+  // This will get the first returned node in the jQuery collection.
+  var areaChart       = new Chart(areaChartCanvas, {
+    type: 'line',
+    data: areaChartData,
+    options: areaChartOptions
+  })
+
+  //-------------
+  //- LINE CHART -
+  //--------------
+  var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+  var lineChartOptions = $.extend(true, {}, areaChartOptions)
+  var lineChartData = $.extend(true, {}, areaChartData)
+  lineChartData.datasets[0].fill = false;
+  lineChartData.datasets[1].fill = false;
+  lineChartOptions.datasetFill = false
+
+  var lineChart = new Chart(lineChartCanvas, {
+    type: 'line',
+    data: lineChartData,
+    options: lineChartOptions
+  })
+
+  //-------------
+  //- DONUT CHART -
+  //-------------
+  // Get context with jQuery - using jQuery's .get() method.
+  var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+  var donutData        = {
+    labels: [
+        'Chrome',
+        'IE',
+        'FireFox',
+        'Safari',
+        'Opera',
+        'Navigator',
+    ],
+    datasets: [
+      {
+        data: [700,500,400,600,300,100],
+        backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+      }
+    ]
+  }
+  var donutOptions     = {
+    maintainAspectRatio : false,
+    responsive : true,
+  }
+  //Create pie or douhnut chart
+  // You can switch between pie and douhnut using the method below.
+  var donutChart = new Chart(donutChartCanvas, {
+    type: 'doughnut',
+    data: donutData,
+    options: donutOptions
+  })
+
+  //-------------
+  //- PIE CHART -
+  //-------------
+  // Get context with jQuery - using jQuery's .get() method.
+  var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+  var pieData        = donutData;
+  var pieOptions     = {
+    maintainAspectRatio : false,
+    responsive : true,
+  }
+  //Create pie or douhnut chart
+  // You can switch between pie and douhnut using the method below.
+  var pieChart = new Chart(pieChartCanvas, {
+    type: 'pie',
+    data: pieData,
+    options: pieOptions
+  })
+
+  //-------------
+  //- BAR CHART -
+  //-------------
+  var barChartCanvas = $('#barChart').get(0).getContext('2d')
+  var barChartData = $.extend(true, {}, areaChartData)
+  var temp0 = areaChartData.datasets[0]
+  var temp1 = areaChartData.datasets[1]
+  barChartData.datasets[0] = temp1
+  barChartData.datasets[1] = temp0
+
+  var barChartOptions = {
+    responsive              : true,
+    maintainAspectRatio     : false,
+    datasetFill             : false
+  }
+
+  var barChart = new Chart(barChartCanvas, {
+    type: 'bar',
+    data: barChartData,
+    options: barChartOptions
+  })
+
+  //---------------------
+  //- STACKED BAR CHART -
+  //---------------------
+  var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+  var stackedBarChartData = $.extend(true, {}, barChartData)
+
+  var stackedBarChartOptions = {
+    responsive              : true,
+    maintainAspectRatio     : false,
+    scales: {
+      xAxes: [{
+        stacked: true,
+      }],
+      yAxes: [{
+        stacked: true
+      }]
+    }
+  }
+
+  var stackedBarChart = new Chart(stackedBarChartCanvas, {
+    type: 'bar',
+    data: stackedBarChartData,
+    options: stackedBarChartOptions
+  })
+})
